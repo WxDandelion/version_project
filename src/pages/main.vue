@@ -219,7 +219,7 @@
       return {
         isCollapsed: false,
         homeRoute: '/',
-        role: ''
+        role: 'tenant'
       }
     },
     components: {
@@ -262,10 +262,11 @@
       }
 
     },
+    /*
     mounted(){
       this.role = localStorage.getItem("role");
     },
-
+*/
     methods: {
       collapsedSider () {
         this.$refs.side1.toggleCollapse();

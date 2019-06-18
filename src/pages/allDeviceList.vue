@@ -101,6 +101,7 @@
         if (this.chooseSite !== '') {
           data.url = 'device/getSiteDeviceList'
         }
+        /*
         let res = await utils.getData(data);
         this.total = res.numResults;
         let result = res.data ? res.data : res.results;
@@ -149,7 +150,48 @@
           default:
             this.makeTabeltable(result);
         }
+        */
         this.loading = false;
+        this.deviceList = [{
+          hardwareId: 'hardware1',
+          assetName: '设备1',
+          locationCity: '北京市',
+          locationDetial: '海淀区',
+          name: '锅炉',
+          id: '11112',
+          emailAddress: '784288200@qq.com',
+          siteToken: '111',
+          metadata: "wowo",
+          assignToken: "upuo",
+          deleted: "已停用",
+          specToken: '1111'
+        }, {
+          hardwareId: 'hardware2',
+          assetName: '设备2',
+          locationCity: '北京市',
+          locationDetial: '海淀区',
+          name: '锅炉',
+          id: '111123',
+          emailAddress: '784288200@qq.com',
+          siteToken: '1112',
+          metadata: "wowo",
+          assignToken: "upuo",
+          deleted: "已停用",
+          specToken: '11112'
+        }, {
+          hardwareId: 'hardware3',
+          assetName: '设备3',
+          locationCity: '北京市',
+          locationDetial: '海淀区',
+          name: '锅炉',
+          id: '1111233',
+          emailAddress: '784288200@qq.com',
+          siteToken: '11133',
+          metadata: "wowo",
+          assignToken: "upuo",
+          deleted: "已停用",
+          specToken: '111133'
+        }]
       },
       makeTabeltable(result){
         result.forEach((item) => {
