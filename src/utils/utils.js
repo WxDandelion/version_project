@@ -19,9 +19,9 @@ let baseUrls = {
 
 //axios默认设置
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8';
-// axios.defaults.baseURL = '/admin';
+axios.defaults.baseURL = '/admin';
 // axios.defaults.withCredentials = true;
-axios.defaults.baseURL= 'http://localhost:8004';
+//axios.defaults.baseURL= 'http://localhost:8004';
 
 
 
@@ -49,11 +49,6 @@ util.getData = function (data) {
     } else {
       url = data.url;
     }
-    if(data.baseUrl){
-      axios.defaults.baseURL = baseUrls[data.baseUrl];
-    }else{
-      axios.defaults.baseURL= 'http://localhost:8004';
-    }
 
     // *开头的params从store.getter中拿动态数据
     let params = {};
@@ -76,7 +71,7 @@ util.getData = function (data) {
         timeout: 10000,
       }).then(
         (response) => {
-          if (parseInt(response.status) === 200 || data.baseUrl=='eth') {
+          if (parseInt(response.status) === 200) {
             return response.data;
           } else {
             Message.error({
@@ -106,7 +101,7 @@ util.getData = function (data) {
         // }
       }).then(
         (response) => {
-          if (parseInt(response.status) === 200 || data.baseUrl=='eth') {
+          if (parseInt(response.status) === 200) {
             return response.data;
           } else{
             Message.error({

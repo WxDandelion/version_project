@@ -39,14 +39,15 @@ const devWebpackConfig = merge(baseWebpackConfig, {
       : false,
     publicPath: config.dev.assetsPublicPath,
     proxy:  {
-      // 去掉这个注释
-      // '/admin/*': {
-      //   target: 'http://localhost:8004',
-      //   changeOrigin: true,
-      //   pathRewrite: {
-      //     '^/admin': ''
-      //   }
-      // }
+      //去掉这个注释
+       '/admin': {
+         target: 'http://ss2.chakonger.net.cn',
+         changeOrigin: true,
+         secure: false,
+         pathRewrite: {
+           '^/admin': ''
+         }
+       }
     },
     quiet: true, // necessary for FriendlyErrorsPlugin
     watchOptions: {

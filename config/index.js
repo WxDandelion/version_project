@@ -11,13 +11,14 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
          // 去掉这个注释
-      // '/admin': {
-      //   target: 'http://localhost:8004',
-      //   changeOrigin: true,
-      //   pathRewrite: {
-      //     '^/admin': ''
-      //   }
-      // }
+       '/admin': {
+         target: 'http://ss2.chakonger.net.cn',
+         changeOrigin: true,
+         secure: false,
+         pathRewrite: {
+           '^/admin': ''
+         }
+       }
     },
 
     // Various Dev Server settings

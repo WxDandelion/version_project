@@ -53,6 +53,7 @@
 
 <script>
   import Cookies from 'js-cookie';
+  import axios from 'axios';
   import utils from '@/utils/utils.js';
   import {Message, Notice}from 'iview';
   export default {
@@ -84,14 +85,24 @@
             let params = {
               "name": this.form.userName,
               "pwd": this.form.password,
-              "role": this.form.role,
             };
             let data = {
-              url: '/user/login',
+              url: '/web/login',
               params: params,
               method: 'post',
-              baseUrl: 'user'
             };
+            /*
+            * 后台请求有两种方式：
+            * 一种直接使用：axios.post/get
+            * 另一种直接调用utils.getData(xxx)的方法
+            * 通过控制台可以看到返回信息
+            */
+            axios.post('/web/login', { params }).then((res) => {
+              console.log(res);
+            });
+            let res = await utils.getData(data);
+            console.log(res);
+            /*
             let res = await utils.getData(data);
             if (res.status == 1) {
               localStorage.setItem("sitewhereToken", res.userData.tenantToken);
@@ -123,7 +134,7 @@
                 closable: true
               });
             }
-
+*/
 
           }
         });
@@ -226,7 +237,6 @@
               url: '/user/regist',
               params: params,
               method: 'post',
-              baseUrl: 'user'
             };
             let res = await utils.getData(data);
             if (res.statue == 0) {
