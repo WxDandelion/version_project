@@ -16,7 +16,7 @@
         <Icon type="arrow-down-b"></Icon>
       </a>
       <DropdownMenu slot="list">
-        <DropdownItem name="ownSpace" v-if="showOwnSpace">个人中心</DropdownItem>
+        <DropdownItem name="ownSpace">个人中心</DropdownItem>
         <DropdownItem name="loginout" divided>退出登录</DropdownItem>
       </DropdownMenu>
     </Dropdown>
@@ -37,9 +37,6 @@
       data: Object
     },
     computed:{
-      showOwnSpace () {
-        return localStorage.getItem("role")=='tenant';
-      }
     },
     mounted() {
 
@@ -52,6 +49,7 @@
           this.$router.push("userInfo");
         } else if (name === 'loginout') {
           localStorage.clear();
+          sessionStorage.clear();
           this.$router.push('login');
 
         }
