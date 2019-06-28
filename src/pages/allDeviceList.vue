@@ -67,7 +67,6 @@
       '$route.query': function () {
         if (this.$route.path == '/allDeviceList') {
           this.getData();
-          this.getFilterData();
           this.$store.state["allDeviceList"] = this;
         }
       }
@@ -75,7 +74,6 @@
 
     mounted() {
       this.getData();
-      this.getFilterData();
       this.$store.state["allDeviceList"] = this;
 
 
@@ -212,28 +210,7 @@
         });
 
       },
-      async getFilterData(){
-        this.siteList = [];
-        this.currentPage = 1;
-        let params = {
-          "pageSize": 15,
-          "page": 1,
-          "sitewhereToken": localStorage.getItem("sitewhereToken")
-        };
-        let data = {
-          url: 'device/getSite',
-          params: params,
-          method: 'get',
-        };
-        let res = await utils.getData(data);
-        res.results.forEach((item) => {
-          this.siteList.push({
-            "label": item.name,
-            "value": item.token,
-          });
-        })
 
-      },
       changePage(page){
         this.currentPage = page;
         this.getData(page);

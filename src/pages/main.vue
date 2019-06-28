@@ -105,10 +105,6 @@
             <Icon type="ios-navigate"></Icon>
             <span>注册新设备</span>
           </MenuItem>
-          <MenuItem name="siteList-1">
-            <Icon type="search"></Icon>
-            <span>地理位置监控</span>
-          </MenuItem>
           <Submenu name="1">
             <template slot="title">
               <Icon type="ios-navigate"></Icon>
@@ -148,17 +144,11 @@
               <Icon type="settings"></Icon>
               历史告警可视化
             </MenuItem>
-            <MenuItem name="ethAlertList">
-              <Icon type="settings"></Icon>
-              区块链存储
-            </MenuItem>
+
 
 
           </Submenu>
-          <MenuItem name="eventSource">
-            <Icon type="settings"></Icon>
-            <span>传输协议配置</span>
-          </MenuItem>
+
           <MenuItem name="allDeviceList-6">
             <Icon type="settings"></Icon>
             <span>控制设备运行</span>

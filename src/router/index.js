@@ -9,13 +9,10 @@ const Login = r => require.ensure([], () => r(require('@/pages/login.vue')), 'Lo
 // const Alert = r => require.ensure([], () => r(require('@/pages/alert.vue')), 'Alert');
 const Error = r => require.ensure([], () => r(require('@/pages/error.vue')), 'Error');
 const Echart = r => require.ensure([], () => r(require('@/pages/echartTest.vue')), 'Echart');
-const AddSite = r => require.ensure([], () => r(require('@/pages/addSite.vue')), 'AddSite');
 const AddDevice = r => require.ensure([], () => r(require('@/pages/addDevice.vue')), 'AddDevice');
 const DeviceList = r => require.ensure([], () => r(require('@/pages/deviceList.vue')), 'DeviceList');
 const AllDeviceList = r => require.ensure([], () => r(require('@/pages/allDeviceList.vue')), 'AllDeviceList');
-
 const Test = r => require.ensure([], () => r(require('@/pages/deviceMap/test.vue')), 'Test');
-const SiteList = r => require.ensure([], () => r(require('@/pages/SiteList.vue')), 'SiteList');
 const DeviceLocMap = r => require.ensure([], () => r(require('@/pages/deviceMap/deviceLocMap.vue')), 'DeviceLocMap');
 const DeviceTemper = r => require.ensure([], () => r(require('@/pages/temper/deviceTemper.vue')), 'DeviceTemper');
 const DevicePa = r => require.ensure([], () => r(require('@/pages/devicePa/devicePa.vue')), 'DevicePa');
@@ -29,8 +26,6 @@ const TenantList = r => require.ensure([], () => r(require('@/pages/admin/tenant
 const UserList = r => require.ensure([], () => r(require('@/pages/admin/userList.vue')), 'UserList');
 const UserTenantList = r => require.ensure([], () => r(require('@/pages/adminUser/userTenantList.vue')), 'UserTenantList');
 const UserInfo = r => require.ensure([], () => r(require('@/pages/userInfo/userInfo.vue')), 'UserInfo');
-const EventSource = r => require.ensure([], () => r(require('@/pages/eventSource/eventSource.vue')), 'EventSource');
-const EthAlertList = r => require.ensure([], () => r(require('@/pages/historyData/ethAlertList.vue')), 'EthAlertList');
 
 
 export const routers = [
@@ -45,12 +40,7 @@ export const routers = [
       name: 'echart',
       meta: {label: 'echart'},
       component: Echart,
-    }, {
-      path: '/addSite',
-      name: 'addSite',
-      meta: {label: '注册新站点'},
-      component: AddSite,
-    }, {
+    },  {
       path: '/addDevice',
       name: 'addDevice',
       meta: {label: '注册新设备'},
@@ -70,12 +60,7 @@ export const routers = [
       name: 'allDeviceList',
       meta: {label: '设备列表'},
       component: AllDeviceList,
-    }, {
-      path: '/siteList',
-      name: 'siteList',
-      meta: {label: '站点列表'},
-      component: SiteList,
-    }, {
+    },  {
       path: '/deviceLocMap',
       name: 'deviceLocMap',
       meta: {label: '地理位置监控'},
@@ -140,17 +125,7 @@ export const routers = [
       name: 'userInfo',
       meta: {label: '个人中心'},
       component: UserInfo,
-    }, {
-      path: '/eventSource',
-      name: 'eventSource',
-      meta: {label: '传输协议'},
-      component: EventSource,
-    }, {
-      path: '/ethAlertList',
-      name: 'ethAlertList',
-      meta: {label: '区块链存储'},
-      component: EthAlertList,
-    }, {
+    },   {
       path: '/test',
       name: 'test',
       meta: {label: 'test'},
