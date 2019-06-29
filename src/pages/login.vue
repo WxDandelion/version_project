@@ -54,6 +54,7 @@
 <script>
   import Cookies from 'js-cookie';
   import axios from 'axios';
+  import md5 from 'md5';
   import utils from '@/utils/utils.js';
   import {Message, Notice}from 'iview';
   export default {
@@ -83,8 +84,9 @@
         this.$refs.loginForm.validate(async (valid) => {
           if (valid) {
             let params = {
-              "name": this.form.userName,
-              "pwd": this.form.password,
+              "userName": this.form.userName,
+              "passWord": this.form.password,
+              "appid": "ZYKJ"
             };
             let data = {
               url: '/web/login',
@@ -102,6 +104,16 @@
             });
             let res = await utils.getData(data);
             console.log(res);
+            if (res.errcode == 0) {
+              sessionStorage.setItem("session", res.sessionID);
+              sessionStorage.setItem("loginStatus", true);
+              localStorage.setItem("username", this.form.userName);
+              this.$router.push({
+                path: '/addDevice',
+              })
+            } else {
+              this.$Message.error(res.msg);
+            }
             /*
             let res = await utils.getData(data);
             if (res.status == 1) {
@@ -186,64 +198,28 @@
                   }
                 }
               }),
-              h('Span', {
-                style: {
-                  color: "#495060",
-                  fontSize: "14px",
-                }
-              }, "使用单位名称："),
-              h('Input', {
-                props: {
-                  value: this.value,
-                  autofocus: true,
-                  placeholder: 'Please enter your unit name...',
-                },
-                on: {
-                  input: (val) => {
-                    this.unitName = val;
-                  }
-                }
-              }),
-              h('Span', {
-                style: {
-                  color: "#495060",
-                  fontSize: "14px",
-                }
-              }, "使用单位id："),
-              h('Input', {
-                props: {
-                  value: this.value,
-                  autofocus: true,
-                  placeholder: 'Please enter your unit id...',
-                },
-                on: {
-                  input: (val) => {
-                    this.unitId = val;
-                  }
-                }
-              }),
             ])
 
           },
           onOk: async () => {
-
             let params = {
-              "name": this.name,
-              "pwd": parseInt(this.pwd),
-              "unitName": this.unitName,
-              "unitId": this.unitId,
+              "userName": this.name,
+              "passWord": md5(this.pwd),
+              "appid": 'ZYKJ',
             };
             let data = {
-              url: '/user/regist',
+              url: '/web/regist',
               params: params,
               method: 'post',
             };
             let res = await utils.getData(data);
-            if (res.statue == 0) {
-              this.$Message.error(res.msg);
+            console.log(res);
+            if (res.errcode == 0) {
+              this.$Message.success('注册成功');
             } else {
-              this.$Message.success(res.msg);
+              this.$Message.error(res.msg);
             }
+
           },
           onCancel: () => {
             this.$Message.info('Clicked cancel');
