@@ -20,12 +20,6 @@
           <FormItem label="用户姓名：" prop="name">
             <span>{{ userForm.name }}</span>
           </FormItem>
-          <FormItem label="使用单位名称：">
-            <span>{{ userForm.unitName }}</span>
-          </FormItem>
-          <FormItem label="使用单位id：">
-            <span>{{ userForm.unitId }}</span>
-          </FormItem>
           <FormItem label="登录密码：">
             <Button type="text" size="small" @click="showEditPassword">修改密码</Button>
           </FormItem>
