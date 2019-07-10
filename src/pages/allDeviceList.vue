@@ -9,16 +9,18 @@
     <Row>
       <Card>
         <Row>
+          <!--
           <label>站点：</label>
           <Select v-model="chooseSite" style="width:200px" clearable>
             <Option v-for="item in siteList" :value="item.value" :key="item.value">{{ item.label }}</Option>
           </Select>
+          -->
           <label>设备状态：</label>
           <Select v-model="chooseState" style="width:200px" clearable>
             <Option v-for="item in stateList" :value="item.value" :key="item.value">{{ item.label }}</Option>
           </Select>
 
-          <span @click="getData(1)" style="margin: 0 10px;"><Button type="primary" icon="search">搜索</Button></span>
+          <span @click="getStatusData()" style="margin: 0 10px;"><Button type="primary" icon="search">搜索</Button></span>
         </Row>
         <Row class="margin-top-10">
           <Table :loading="loading" :columns="deviceColumn.columns" :data="deviceList"></Table>
@@ -47,6 +49,7 @@
       return {
         deviceColumn,
         deviceList: [],
+        allDeviceList: [],
         siteList: [],
         chooseSite: '',
         loading: true,
@@ -54,11 +57,14 @@
         currentPage: 1,
         chooseState:'',
         stateList:[{
-            "label":"已停用",
-          "value":"true",
+          "label":"已停用",
+          "value": '1',
         },{
           "label":"运行中",
-          "value":"false",
+          "value": '2',
+        }, {
+          "label":"全部",
+          "value": '3',
         }]
       }
     },
@@ -67,7 +73,7 @@
       '$route.query': function () {
         if (this.$route.path == '/allDeviceList') {
           this.getData();
-          this.getFilterData();
+          //this.getFilterData();
           this.$store.state["allDeviceList"] = this;
         }
       }
@@ -75,7 +81,7 @@
 
     mounted() {
       this.getData();
-      this.getFilterData();
+      //this.getFilterData();
       this.$store.state["allDeviceList"] = this;
 
 
@@ -84,114 +90,37 @@
       async getData(page){
         this.loading = true;
         this.deviceList = [];
-
-        let params = {
-          "pageSize": 15,
-          "page": page || 1,
-          "siteToken": this.chooseSite,
-          "sitewhereToken": localStorage.getItem("sitewhereToken"),
-          "deleted":this.chooseState,
-
-        };
         let data = {
-          url: 'device/getAllDeviceList',
-          params: params,
-          method: 'get'
+          url: '/web/devicelist',
+          params: {},
+          method: 'post',
+          isNeedSession: true,
         };
-        if (this.chooseSite !== '') {
-          data.url = 'device/getSiteDeviceList'
-        }
-        /*
         let res = await utils.getData(data);
-        this.total = res.numResults;
-        let result = res.data ? res.data : res.results;
-        switch(this.chooseState)
-        {
-          case "true":
-            result.forEach((item) => {
-                if(item.comments == "已停用"){
-                  this.deviceList.push({
-                    "hardwareId": item.hardwareId,
-                    "assetName": item.specification.assetName,
-                    "locationCity": item.metadata.locationCity,
-                    "locationDetial": item.metadata.locationDetial,
-                    "name": item.assignment.assetName,
-                    "id": item.assignment.assetId,
-                    "emailAddress": item.assignment.emailAddress,
-                    "siteToken": item.siteToken,
-                    "metadata": item.metadata,
-                    "assignToken": item.assignment.token,
-                    "deleted":item.comments=="已停用"?"已停用":"运行中",
-                    "specToken":item.specification.token
-                  });
-                }
-            });
-            break;
-          case "false":
-            result.forEach((item) => {
-              if(item.comments !== "已停用"){
-                this.deviceList.push({
-                  "hardwareId": item.hardwareId,
-                  "assetName": item.specification.assetName,
-                  "locationCity": item.metadata.locationCity,
-                  "locationDetial": item.metadata.locationDetial,
-                  "name": item.assignment.assetName,
-                  "id": item.assignment.assetId,
-                  "emailAddress": item.assignment.emailAddress,
-                  "siteToken": item.siteToken,
-                  "metadata": item.metadata,
-                  "assignToken": item.assignment.token,
-                  "deleted":item.comments=="已停用"?"已停用":"运行中",
-                  "specToken":item.specification.token
-                });
-              }
-            });
-            break;
-          default:
-            this.makeTabeltable(result);
-        }
-        */
+        res.device.forEach((item) => {
+          this.deviceList.push({
+            devID: item.devID,
+            devName: item.devName,
+            devStatus: item.devStatus === 'A002' ? '已停用' : '运行中',
+            devType: item.devType,
+            locationCity: item.position.city,
+            locationDetail: item.position.area,
+            infraName: item.unitedevice[0].infraName,
+            token: item.token,
+          })
+          this.allDeviceList.push({
+            devID: item.devID,
+            devName: item.devName,
+            devStatus: item.devStatus === 'A002' ? '已停用' : '运行中',
+            devType: item.devType,
+            locationCity: item.position.city,
+            locationDetail: item.position.area,
+            infraName: item.unitedevice[0].infraName,
+            token: item.token,
+          })
+        });
+        this.total = this.deviceList.length;
         this.loading = false;
-        this.deviceList = [{
-          hardwareId: 'hardware1',
-          assetName: '设备1',
-          locationCity: '北京市',
-          locationDetial: '海淀区',
-          name: '锅炉',
-          id: '11112',
-          emailAddress: '784288200@qq.com',
-          siteToken: '111',
-          metadata: "wowo",
-          assignToken: "upuo",
-          deleted: "已停用",
-          specToken: '1111'
-        }, {
-          hardwareId: 'hardware2',
-          assetName: '设备2',
-          locationCity: '北京市',
-          locationDetial: '海淀区',
-          name: '锅炉',
-          id: '111123',
-          emailAddress: '784288200@qq.com',
-          siteToken: '1112',
-          metadata: "wowo",
-          assignToken: "upuo",
-          deleted: "已停用",
-          specToken: '11112'
-        }, {
-          hardwareId: 'hardware3',
-          assetName: '设备3',
-          locationCity: '北京市',
-          locationDetial: '海淀区',
-          name: '锅炉',
-          id: '1111233',
-          emailAddress: '784288200@qq.com',
-          siteToken: '11133',
-          metadata: "wowo",
-          assignToken: "upuo",
-          deleted: "已停用",
-          specToken: '111133'
-        }]
       },
       makeTabeltable(result){
         result.forEach((item) => {
@@ -212,6 +141,7 @@
         });
 
       },
+      // 用于分页的，目前用不到
       async getFilterData(){
         this.siteList = [];
         this.currentPage = 1;
@@ -233,6 +163,18 @@
           });
         })
 
+      },
+      async getStatusData() {
+        if (this.chooseState === '1') {
+          this.deviceList = this.allDeviceList.filter(item => item.devStatus === '已停用');
+          this.total = this.deviceList.length;
+        } else if (this.chooseState === '2') {
+          this.deviceList = this.allDeviceList.filter(item => item.devStatus === '运行中');
+          this.total = this.deviceList.length;
+        } else {
+          this.deviceList = this.allDeviceList;
+          this.total = this.deviceList.length;
+        }
       },
       changePage(page){
         this.currentPage = page;

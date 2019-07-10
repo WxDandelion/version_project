@@ -1,6 +1,7 @@
 // import Vue from 'vue'
 // import Router from 'vue-router'
 // import HelloWorld from '@/components/HelloWorld'
+
 import Main from '@/pages/main.vue';
 // import Login from '@/pages/login.vue';
 const Login = r => require.ensure([], () => r(require('@/pages/login.vue')), 'Login');
@@ -29,8 +30,6 @@ const TenantList = r => require.ensure([], () => r(require('@/pages/admin/tenant
 const UserList = r => require.ensure([], () => r(require('@/pages/admin/userList.vue')), 'UserList');
 const UserTenantList = r => require.ensure([], () => r(require('@/pages/adminUser/userTenantList.vue')), 'UserTenantList');
 const UserInfo = r => require.ensure([], () => r(require('@/pages/userInfo/userInfo.vue')), 'UserInfo');
-const EventSource = r => require.ensure([], () => r(require('@/pages/eventSource/eventSource.vue')), 'EventSource');
-const EthAlertList = r => require.ensure([], () => r(require('@/pages/historyData/ethAlertList.vue')), 'EthAlertList');
 
 
 export const routers = [
@@ -39,21 +38,33 @@ export const routers = [
     path: '/',
     name: 'Main',
     component: Main,
-    meta: {label: '设备监管首页'},
+    meta: {
+      label: '设备监管首页',
+      requireAuth: true
+    },
     children: [{
       path: '/echart',
       name: 'echart',
-      meta: {label: 'echart'},
+      meta: {
+        label: 'echart',
+        requireAuth: true
+      },
       component: Echart,
     }, {
       path: '/addSite',
       name: 'addSite',
-      meta: {label: '注册新站点'},
+      meta: {
+        label: '注册新站点',
+        requireAuth: true
+      },
       component: AddSite,
     }, {
       path: '/addDevice',
       name: 'addDevice',
-      meta: {label: '注册新设备'},
+      meta: {
+        label: '注册新设备',
+        requireAuth: true
+      },
       component: AddDevice,
     }, {
       path: '/error',
@@ -63,37 +74,58 @@ export const routers = [
     }, {
       path: '/deviceList',
       name: 'deviceList',
-      meta: {label: '设备列表'},
+      meta: {
+        label: '设备列表',
+        requireAuth: true
+      },
       component: DeviceList,
     }, {
       path: '/allDeviceList',
       name: 'allDeviceList',
-      meta: {label: '设备列表'},
+      meta: {
+        label: '设备列表',
+        requireAuth: true
+      },
       component: AllDeviceList,
     }, {
       path: '/siteList',
       name: 'siteList',
-      meta: {label: '站点列表'},
+      meta: {
+        label: '站点列表',
+        requireAuth: true
+      },
       component: SiteList,
     }, {
       path: '/deviceLocMap',
       name: 'deviceLocMap',
-      meta: {label: '地理位置监控'},
+      meta: {
+        label: '地理位置监控',
+        requireAuth: true
+      },
       component: DeviceLocMap,
     }, {
       path: '/deviceTemper',
       name: 'deviceTemper',
-      meta: {label: '温度监控'},
+      meta: {
+        label: '温度监控',
+        requireAuth: true
+      },
       component: DeviceTemper,
     }, {
       path: '/devicePa',
       name: 'devicePa',
-      meta: {label: '压力监控'},
+      meta: {
+        label: '压力监控',
+        requireAuth: true
+      },
       component: DevicePa,
     }, {
       path: '/runStatus',
       name: 'runStatus',
-      meta: {label: '运行状态'},
+      meta: {
+        label: '运行状态',
+        requireAuth: true
+      },
       component: RunStatus,
     }, {
       path: '/deviceDetail',
@@ -103,17 +135,26 @@ export const routers = [
     }, {
       path: '/warnData',
       name: 'warnData',
-      meta: {label: '告警统计'},
+      meta: {
+        label: '告警统计',
+        requireAuth: true
+      },
       component: WarnData,
     }, {
       path: '/errorData',
       name: 'errorData',
-      meta: {label: '停用统计'},
+      meta: {
+        label: '停用统计',
+        requireAuth: true
+      },
       component: ErrorData,
     }, {
       path: '/deviceHistoryVersion',
       name: 'deviceHistoryVersion',
-      meta: {label: '设备告警可视化'},
+      meta: {
+        label: '设备告警可视化',
+        requireAuth: true
+      },
       component: DeviceHistoryVersion,
     }, {
       path: '/allHistoryVersion',
@@ -140,16 +181,6 @@ export const routers = [
       name: 'userInfo',
       meta: {label: '个人中心'},
       component: UserInfo,
-    }, {
-      path: '/eventSource',
-      name: 'eventSource',
-      meta: {label: '传输协议'},
-      component: EventSource,
-    }, {
-      path: '/ethAlertList',
-      name: 'ethAlertList',
-      meta: {label: '区块链存储'},
-      component: EthAlertList,
     }, {
       path: '/test',
       name: 'test',

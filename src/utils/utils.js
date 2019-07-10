@@ -52,6 +52,11 @@ util.getData = function (data) {
 
     // *开头的params从store.getter中拿动态数据
     let params = {};
+    if (data.isNeedSession) {
+      params = {
+        sessionID: sessionStorage.getItem('session'),
+      }
+    }
     Object.assign(params, data.params);
     if (params) {
       for (let key in params) {
@@ -67,7 +72,7 @@ util.getData = function (data) {
       return axios({
         method: data.method ? data.method : 'get',
         url: url,
-        params: data.params, // 请求时带的参数
+        params: params, // 请求时带的参数
         timeout: 10000,
       }).then(
         (response) => {
@@ -94,7 +99,7 @@ util.getData = function (data) {
       return axios({
         method: data.method ? data.method : 'get',
         url: url,
-        data: data.params, // 请求时带的参数
+        data: params, // 请求时带的参数
         timeout: 10000,
         // headers: {
         //   'X-Requested-With': 'XMLHttpRequest'

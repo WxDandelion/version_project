@@ -5,20 +5,20 @@ import router from '../../main.js';
 export const deviceColumn = {
   columns: [{
     'title': '设备ID',
-    'key': 'hardwareId',
-    'width': 70
+    'key': 'devID',
+    'width': 200
   }, {
-    'title': '设备类别',
-    'key': 'assetName',
+    'title': '设备名称',
+    'key': 'devName',
     'minWidth': 100
-  },  {
+  }, {
     title: '运行状态',
-    key: 'deleted',
+    key: 'devStatus',
     'minWidth': 100,
     render: (h, params) => {
       const row = params.row;
-      const color = row.deleted !=="已停用" ? 'blue' :  'red';
-      const text = row.status !=="已停用" ? '运行中' : "已停用";
+      const color = row.devStatus !=="已停用" ? 'blue' :  'red';
+      const text = row.devStatus !=="已停用" ? '运行中' : "已停用";
 
       return h('Tag', {
         props: {
@@ -33,16 +33,16 @@ export const deviceColumn = {
     'minWidth': 100
   }, {
     'title': '详细地址',
-    'key': 'locationDetial',
-    'minWidth': 300
-  }, {
-    'title': '安全管理员',
-    'key': 'name',
+    'key': 'locationDetail',
     'minWidth': 100
   }, {
-    'title': '安全管理员手机号',
-    'key': 'id',
-    'minWidth': 120
+    'title': '设备类别',
+    'key': 'devType',
+    'minWidth': 100
+  }, {
+    'title': '组合设备信息',
+    'key': 'infraName',
+    'minWidth': 100
   },
 
     {
@@ -64,7 +64,7 @@ export const deviceColumn = {
                     router.push({
                       path: "deviceTemper",
                       query: {
-                        "token": params.row.assignToken
+                        "devID": params.row.devID
                       }
                     });
                   }
@@ -85,7 +85,7 @@ export const deviceColumn = {
                     router.push({
                       path: "devicePa",
                       query: {
-                        "token": params.row.assignToken
+                        "devID": params.row.devID
                       }
                     });
                   }
@@ -106,7 +106,7 @@ export const deviceColumn = {
                     router.push({
                       path: "warnData",
                       query: {
-                        "assignToken": params.row.assignToken
+                        "devID": params.row.devID
                       }
                     });
                   }
@@ -157,7 +157,7 @@ export const deviceColumn = {
             ]);
             break;
           case "6":
-            if (params.row.deleted == "运行中") {
+            if (params.row.devStatus == "运行中") {
               return h('div', [
                 h('Button', {
                   props: {
@@ -167,6 +167,7 @@ export const deviceColumn = {
                   },
                   on: {
                     click: async () => {
+                      /*
                       let params1 = {
                         "specToken": params.row.specToken,
                         "sitewhereToken": localStorage.getItem("sitewhereToken")
@@ -204,11 +205,13 @@ export const deviceColumn = {
                         store.state.allDeviceList.getData();
 
                       }
+                      */
+                      console.log('22222');
                     }
                   }
                 }, '停用设备')
               ]);
-            } else if (params.row.deleted == "已停用") {
+            } else if (params.row.devStatus == "已停用") {
               return h('div', [
                 h('Button', {
                   props: {
@@ -218,6 +221,7 @@ export const deviceColumn = {
                   },
                   on: {
                     click: async () => {
+                      /*
                       let params1 = {
                         "specToken": params.row.specToken,
                         "sitewhereToken": localStorage.getItem("sitewhereToken")
@@ -254,6 +258,8 @@ export const deviceColumn = {
                       if (res) {
                         store.state.allDeviceList.getData();
                       }
+                    */
+                      console.log('11111');
                     }
                   }
                 }, '启动设备')

@@ -65,6 +65,7 @@
     methods: {
       async getData(page){
         this.loading = false;
+        /*
         this.alertList = [];
         let params = {
           "pageSize": 15,
@@ -86,6 +87,7 @@
         this.total = res.numResults;
         this.alertList = res;
 //        console.log( this.alertList)
+ */
         this.loading = false;
       },
 

@@ -30,13 +30,21 @@ const RouterConfig = {
 const router = new VueRouter(RouterConfig);
 
 router.beforeEach((to, from, next) => {
-  iView.LoadingBar.start();
-  Util.title(to.meta.label);
-  store.state.currentPath = to.path;
-  store.state.routeParams = to.params;
-  next();
-
-
+  if (to.matched.some(res => res.meta.requireAuth)) {
+    if (sessionStorage.getItem('loginStatus')) {// 判断是否登录
+      Util.title(to.meta.label);
+      iView.LoadingBar.start();
+      next()
+    } else {// 没登录则跳转到登录界面
+      next({
+        path: '/login',
+      })
+    }
+  } else {
+    next()
+  }
+  //store.state.currentPath = to.path;
+  //store.state.routeParams = to.params;
 });
 
 router.afterEach(() => {

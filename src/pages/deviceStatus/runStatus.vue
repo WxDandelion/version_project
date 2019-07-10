@@ -16,9 +16,10 @@
 <script>
   //  import moment from 'moment';
   import utils from '@/utils/utils.js';
-  import {cityNameMap} from '@/utils/cityNameMap.js'
+  import {cityNameMap} from '@/utils/cityNameMap.js';
   import vCityMap from '@/components/vCityMap.vue';
   import {cityMap} from '@/services/staticData/dRunStatus.js';
+  import mapJson from '@/services/staticData/beijingJson.json';
   export default {
     data() {
       return {
@@ -26,6 +27,7 @@
         flag: false,
         cityNameMap,
         cityMap,
+        mapJson,
         storeDeviceLoc: new Map(),
         alertData: [],
         warnList: [],
@@ -46,11 +48,12 @@
     },
     created() {
       this.init();
-      this.getRealData();
+      //this.getRealData();
     },
     methods: {
       async init(){
-        let cityName = this.$route.query.city;
+        //let cityName = this.$route.query.city;
+        /*
         await Promise.all([
           this.getJson(),
           this.getDevices()
@@ -81,9 +84,36 @@
         this.cityMap.option.geo.map = cityName;
         this.cityMap.cityName = cityName;
         this.flag = true;
+        */
+        await Promise.all([
+          this.getJson(),
+          this.getDevices()
+        ]);
+        let cityName = "北京市";
+        let runData = [];
+        let stopData = [];
+        this.data.forEach((item)=>{
+          if(item.value[3] !== 'A002'){
+            runData.push(item);
+          }else{
+            stopData.push(item);
+          }
+        })
+        this.cityMap.option.series[0].data = runData;
+        this.cityMap.option.series[2].data = stopData;
+
+        this.cityMap.option.series[1].data = this.data;
+
+        this.cityMap.option.series[1].map = cityName;
+
+
+        this.cityMap.option.geo.map = cityName;
+        this.cityMap.cityName = cityName;
+        this.flag = true;
       },
       //获取所在城市json
       async getJson(){
+        /*
         let cityName = this.$route.query.city;
         let params = {
           "cityName": cityNameMap[cityName],
@@ -97,10 +127,13 @@
         };
         let res = await utils.getData(data);
         this.cityMap.geoJson = res;
-
+        */
+        let cityName = '北京市';
+        this.cityMap.geoJson = mapJson;
       },
       //获取设备坐标
       async getDevices(){
+        /*
         let params = {
           "siteToken": localStorage.getItem("siteToken"),
           "sitewhereToken": localStorage.getItem("sitewhereToken")
@@ -122,6 +155,26 @@
             "name": "设备id：" + item.hardwareId,
             "value": val,
           })
+        });
+        */
+        let data = {
+          url: '/web/devicelist',
+          params: {},
+          method: 'post',
+          isNeedSession: true,
+        };
+        let res = await utils.getData(data);
+        res.device.forEach((item) => {
+          let val = [];
+          val.push(item.position.lng);
+          val.push(item.position.lat);
+          //this.storeDeviceLoc.set(item.assignToken, val);
+          val.push(item.devID);
+          val.push(item.devStatus);
+          this.data.push({
+            "name": "设备名称：" + item.devName,
+            "value": val,
+          });
         });
       },
       async getRealData(){
@@ -180,7 +233,7 @@
         this.$router.push({
           path: "deviceDetail",
           query:{
-            "hardwareId":params.value[2]
+            "devID":params.value[2],
           }
         });
       }

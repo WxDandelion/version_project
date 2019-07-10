@@ -99,13 +99,15 @@
              collapsible :collapsed-width="0" v-model="isCollapsed">
         <div class="layout-logo-left">
         </div>
-        <Menu v-if="role=='tenant'" active-name="addSite" theme="dark" width="auto" :class="menuitemClasses"
-              @on-select="routeTo">
-          <MenuItem name="addSite">
+        <Menu v-if="role=='tenant'" :open-names='openMenu' :active-name='activeOption' theme="dark" width="auto" :class="menuitemClasses"
+              @on-select="routeTo" ref="leftMenu">
+          <!--
+          <MenuItem name="addDevice">
             <Icon type="ios-navigate"></Icon>
             <span>注册新设备</span>
           </MenuItem>
-          <MenuItem name="siteList-1">
+          -->
+          <MenuItem name="deviceLocMap">
             <Icon type="search"></Icon>
             <span>地理位置监控</span>
           </MenuItem>
@@ -122,7 +124,7 @@
               <Icon type="settings"></Icon>
               压力监控
             </MenuItem>
-            <MenuItem name="siteList-2">
+            <MenuItem name="runStatus">
               <Icon type="settings"></Icon>
               运行状态监控
             </MenuItem>
@@ -148,17 +150,9 @@
               <Icon type="settings"></Icon>
               历史告警可视化
             </MenuItem>
-            <MenuItem name="ethAlertList">
-              <Icon type="settings"></Icon>
-              区块链存储
-            </MenuItem>
 
 
           </Submenu>
-          <MenuItem name="eventSource">
-            <Icon type="settings"></Icon>
-            <span>传输协议配置</span>
-          </MenuItem>
           <MenuItem name="allDeviceList-6">
             <Icon type="settings"></Icon>
             <span>控制设备运行</span>
@@ -219,7 +213,9 @@
       return {
         isCollapsed: false,
         homeRoute: '/',
-        role: 'tenant'
+        role: 'tenant',
+        activeOption: '',
+        openMenu: [],
       }
     },
     components: {
@@ -267,6 +263,30 @@
       this.role = localStorage.getItem("role");
     },
 */
+    mounted() {
+      // 刷新页面时的 导航栏active定位  仅做了普通用户的侧栏部分
+      if (this.$route.path === '/allDeviceList') {
+        let kind = this.$route.query.kind;
+        this.activeOption = 'allDeviceList-' + kind;
+        if (kind === '1' || kind === '2') {
+          this.openMenu = ['1'];
+        } else if (kind >= 3 && kind <= 5) {
+          this.openMenu = ['2'];
+        }
+
+      } else {
+        this.activeOption = this.$route.path.replace('/', '');
+        if (this.$route.path === '/runStatus') {
+          this.openMenu = ['1'];
+        } else if(this.$route.path === '/allHistoryVersion') {
+          this.openMenu = ['2'];
+        }
+      }
+      this.$nextTick(() => {
+        this.$refs.leftMenu.updateOpened();
+        this.$refs.leftMenu.updateActiveName();
+      })
+    },
     methods: {
       collapsedSider () {
         this.$refs.side1.toggleCollapse();
@@ -283,45 +303,6 @@
           baseUrl:'eth'
         };
 
-        await utils.getData(data)
-
-      },
-
-      async loginUser(){
-        let params = {
-          "name": "admin",
-          "pwd": 12345,
-        };
-        let data = {
-          url: '/user/login',
-          params: params,
-          method: 'post',
-          baseUrl: 'user'
-        };
-        let res = await utils.getData(data);
-        console.log(res);
-//        if (res.userData) {
-//          localStorage.setItem("sitewhereToken", res.userData.tenantToken);
-//          localStorage.setItem("username", res.userData.name);
-//
-//        }
-
-
-      },
-      async regist(){
-        let params = {
-          "name": "loutong7",
-          "pwd": 123,
-          "unitName": "使用单位7",
-          "unitId": "12345678917",
-
-        };
-        let data = {
-          url: '/user/regist',
-          params: params,
-          method: 'post',
-          baseUrl: 'user'
-        };
         await utils.getData(data)
 
       },

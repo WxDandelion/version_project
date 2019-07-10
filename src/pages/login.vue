@@ -85,7 +85,7 @@
           if (valid) {
             let params = {
               "userName": this.form.userName,
-              "passWord": this.form.password,
+              "passWord": md5(this.form.password),
               "appid": "ZYKJ"
             };
             let data = {
@@ -93,26 +93,20 @@
               params: params,
               method: 'post',
             };
-            /*
-            * 后台请求有两种方式：
-            * 一种直接使用：axios.post/get
-            * 另一种直接调用utils.getData(xxx)的方法
-            * 通过控制台可以看到返回信息
-            */
-            axios.post('/web/login', { params }).then((res) => {
-              console.log(res);
-            });
             let res = await utils.getData(data);
-            console.log(res);
             if (res.errcode == 0) {
               sessionStorage.setItem("session", res.sessionID);
               sessionStorage.setItem("loginStatus", true);
               localStorage.setItem("username", this.form.userName);
               this.$router.push({
-                path: '/addDevice',
-              })
+                path: '/allDeviceList?kind=1',
+              });
             } else {
-              this.$Message.error(res.msg);
+              this.$Message.error({
+                content: res.errmsg,
+                duration: 5,
+                closable: true
+              });
             }
             /*
             let res = await utils.getData(data);
@@ -217,7 +211,7 @@
             if (res.errcode == 0) {
               this.$Message.success('注册成功');
             } else {
-              this.$Message.error(res.msg);
+              this.$Message.error(res.errmsg);
             }
 
           },

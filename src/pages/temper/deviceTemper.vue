@@ -2,7 +2,6 @@
   .add-button {
     margin-bottom: 10px;
   }
-
 </style>
 <template>
   <div>
@@ -15,6 +14,17 @@
       </Card>
 
     </Row>
+    <Modal v-model="isModalVisible" title="设备最新数据" @on-ok="onOk" @on-cancel="onCancel">
+      <p>设备运行状态：{{dataList.devReady}}</p>
+      <p>设备开关：{{dataList.switch}}</p>
+      <p>设备档位：{{dataList.workMode}}</p>
+      <p>设定温度：{{dataList.tempSet}}</p>
+      <p>空气温度：{{dataList.airTemp}}</p>
+      <p>汽化温度：{{dataList.waterBack}}</p>
+      <p>出水温度：{{dataList.waterOut}}</p>
+      <p>温度：{{dataList.temp}}</p>
+      <p>湿度：{{dataList.shi}}</p>
+    </Modal>
   </div>
 </template>
 <script>
@@ -27,6 +37,8 @@
         inOutTempChart,
         deviceTempChart,
         flag: false,
+        isModalVisible: true,
+        dataList: {},
       }
     },
 
@@ -37,17 +49,25 @@
       '$route'(to, from){
         if (to.path == '/deviceTemper') {
           this.init();
-          this.getRealData();
+          //this.getRealData();
         }
       }
     },
     mounted() {
       this.init();
-      this.getRealData();
+      //this.getRealData();
     },
     methods: {
+      onOk: () => {
+        this.isModalVisible = false;
+      },
+      onCancel: () => {
+        this.isModalVisible = false;
+      },
       async init(){
-        let oneHour = 3600 * 1000;
+        /*
+        // 目前拿不到历史数据
+        let oneHour = 3600 * 1000 * 24 * 3;
         let startDate = new Date(new Date() - oneHour);
         let params = {
           "startDate": startDate,
@@ -60,17 +80,39 @@
           method: 'get',
           baseUrl:'realTime'
         };
+        */
+        let data = {
+          url: '/web/deviceqry',
+          params: {
+            'devID': this.$route.query.devID,
+          },
+          method: 'post',
+          isNeedSession: true,
+        };
         let res = await utils.getData(data);
+        res = res.CDATA;
+        this.dataList.airTemp = res.AIRTEMP + '度';
+        this.dataList.steamTemp = res.STEAMTEMP + '度';
+        this.dataList.tempSet = res.TEMPSET + '度';
+        this.dataList.waterBack = res.WATERBACK + '度';
+        this.dataList.waterOut = res.WATEROUT + '度';
+        this.dataList.temp = res.wendu + '度';
+        this.dataList.shi = res.shidu + '%';
+        this.dataList.devReady = res.devReady === '1' ? '设备工作正常' : '设备工作不正常';
+        this.dataList.switch = res.switch === '1' ? '开' : '关';
+        this.dataList.workMode = res.workMode >= 20 ? '强档' : '中档';
+        /*
         let result = this.changeData(res);
         inOutTempChart.option.series[0].data = result.resultIn;
         inOutTempChart.option.series[1].data = result.resultOut;
         deviceTempChart.option.series[0].data = result.resultDevice;
-
+        */
         this.flag = true;
 
       },
 
       async getRealData(){
+        /*
         if (this.flag == true) {
           let oneMinu = 10000;
           let params = {
@@ -97,6 +139,7 @@
             }
           }, 20000);
         }
+        */
       },
       //改变数据格式
       changeData(res){

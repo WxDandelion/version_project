@@ -3,7 +3,7 @@
     <bm-navigation anchor="BMAP_ANCHOR_TOP_RIGHT"></bm-navigation>
 
     <bm-marker
-      v-for="(item,key) in data.list"
+      v-for="(item, key) in data.list"
       :key="key"
       :position=item.loc
       :dragging="true"
@@ -29,8 +29,8 @@
     },
     methods: {
       handler ({BMap, map}) {
-        this.center.lng = this.data.lng
-        this.center.lat = this.data.lat
+        this.center.lat = '39.960446';
+        this.center.lng = '116.356956';
         this.zoom = this.data.zoom
       },
       onPushTo(){

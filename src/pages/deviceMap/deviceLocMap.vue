@@ -42,29 +42,26 @@
     },
     methods: {
       async init(){
-        let params = {
-          "siteToken": localStorage.getItem("siteToken"),
-          "sitewhereToken": localStorage.getItem("sitewhereToken")
-        };
         let data = {
-          url: 'device/getSiteDevices',
-          params: params,
-          method: 'get'
+          url: '/web/devicelist',
+          params: {},
+          method: 'post',
+          isNeedSession: true,
         };
         let res = await utils.getData(data);
         this.data.lat = this.$route.query.lat;
         this.data.lng = this.$route.query.lng;
         this.data.zoom = 15;
         this.data.list = [];
-        res.data.forEach((item) => {
+        res.device.forEach((item) => {
           let loc1 = {
-            "lng": item.centerLongitude,
-            "lat": item.centerLatitude
+            "lng": item.position.lng,
+            "lat": item.position.lat
           }
           this.data.list.push({
             "loc": loc1,
-            "label": "设备id："+item.hardwareId,
-            "hardwareId":item.hardwareId
+            "label": "设备名称："+item.devName,
+            "devID":item.devID
           })
         });
         this.flag = true;
@@ -76,7 +73,7 @@
         this.$router.push({
           path: "deviceDetail",
            query: {
-             "hardwareId": params.list[0].hardwareId,
+             "devID": params.list[0].devID,
            }
         });
       }

@@ -20,19 +20,23 @@
           <FormItem label="用户姓名：" prop="name">
             <span>{{ userForm.name }}</span>
           </FormItem>
+          <!--
           <FormItem label="使用单位名称：">
             <span>{{ userForm.unitName }}</span>
           </FormItem>
           <FormItem label="使用单位id：">
             <span>{{ userForm.unitId }}</span>
           </FormItem>
+          -->
           <FormItem label="登录密码：">
             <Button type="text" size="small" @click="showEditPassword">修改密码</Button>
           </FormItem>
+          <!--
           <div>
             <Button type="text" style="width: 100px;" @click="cancelEditUserInfor">取消</Button>
             <Button type="primary" style="width: 100px;" :loading="save_loading" @click="saveEdit">保存</Button>
           </div>
+          -->
         </Form>
       </div>
     </Card>
@@ -59,6 +63,7 @@
 
 <script>
   import utils from '@/utils/utils.js';
+  import md5 from 'md5';
   export default {
     name: 'userInfo',
     data () {
@@ -137,29 +142,33 @@
         this.editPasswordModal = false;
       },
       saveEditPass () {
-        this.$refs['editPasswordForm'].validate((valid) => {
+        this.$refs['editPasswordForm'].validate(async (valid) => {
           if (valid) {
             this.savePassLoading = true;
             // you can write ajax request here
+            let params = {
+              userName: localStorage.getItem('username'),
+              passWord: md5(this.editPasswordForm.oldPass),
+              newPassWord: md5(this.editPasswordForm.newPass),
+              appid: 'ZYKJ',
+            };
+            let data = {
+              url: '/web/changepassword',
+              params: params,
+              method: 'post'
+            }
+            let res = await utils.getData(data);
+            if (res.errcode == 0) {
+              this.$Message.success('修改成功');
+              this.editPasswordModal = false;
+            } else {
+              this.$Message.error(res.errmsg);
+            }
           }
         });
       },
       async init () {
-
-        let params = {
-          "name": "loutong6",
-        };
-        let data = {
-          url: '/user/getUserInfo',
-          params: params,
-          method: 'get',
-          baseUrl: 'user'
-        };
-        let res = await utils.getData(data);
-
-        this.userForm.name = res.name;
-        this.userForm.unitName = res.unitName;
-        this.userForm.unitId = res.unitId;
+        this.userForm.name = localStorage.getItem('username');
       },
 
 
