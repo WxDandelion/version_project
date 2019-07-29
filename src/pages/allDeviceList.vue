@@ -74,7 +74,7 @@
         if (this.$route.path == '/allDeviceList') {
           this.getData();
           //this.getFilterData();
-          this.$store.state["allDeviceList"] = this;
+          //this.$store.state["allDeviceList"] = this;
         }
       }
     },
@@ -82,7 +82,7 @@
     mounted() {
       this.getData();
       //this.getFilterData();
-      this.$store.state["allDeviceList"] = this;
+      //this.$store.state["allDeviceList"] = this;
 
 
     },
@@ -90,6 +90,8 @@
       async getData(page){
         this.loading = true;
         this.deviceList = [];
+        this.chooseState = '';
+        this.allDeviceList = [];
         let data = {
           url: '/web/devicelist',
           params: {},

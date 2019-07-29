@@ -230,12 +230,14 @@
         this.ErrorList = [];
       },
       pushTo(params){
-        this.$router.push({
-          path: "deviceDetail",
-          query:{
-            "devID":params.value[2],
-          }
-        });
+        if (params.value) {
+          this.$router.push({
+            path: "deviceDetail",
+            query:{
+              "devID":params.value[2],
+            }
+          });
+        }
       }
 
 

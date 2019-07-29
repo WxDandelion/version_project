@@ -113,16 +113,25 @@
 
     methods: {
       async getData(){
-        let params = {
-          "hardwareId": this.$route.query.hardwareId,
-          "sitewhereToken": localStorage.getItem("sitewhereToken"),
-        };
+        // let params = {
+        //   "hardwareId": this.$route.query.hardwareId,
+        //   "sitewhereToken": localStorage.getItem("sitewhereToken"),
+        // };
+        // let data = {
+        //   url: '/deviceInfo/getDetail',
+        //   params: params,
+        //   method: 'get'
+        // };
         let data = {
-          url: '/deviceInfo/getDetail',
-          params: params,
-          method: 'get'
+          url: '/web/deviceqry',
+          params: {
+            'devID': this.$route.query.devID,
+          },
+          method: 'post',
+          isNeedSession: true,
         };
         let res = await utils.getData(data);
+        /*
         this.resInfo = res;
         this.resInfo.city = res.metadata.locationCity;
         this.resInfo.location = res.metadata.locationDetial;
@@ -140,8 +149,26 @@
         this.specResInfo.title = "设备类别基本信息";
         this.specToken = res.specification.token;
         this.state = res.comments;
+        */
+        this.resInfo = {};
+        this.resInfo.hardwareId = res.devID;
+        this.resInfo.devName = res.devName;
+        this.resInfo.comments = res.devStatus === 'A002' ? '已停用' : '运行中';
+        this.resInfo.city = res.position.city;
+        this.resInfo.location = res.position.area;
+        this.resInfo.siteCity = res.position.city;
+        this.resInfo.siteLocation = res.position.area;
+        this.resInfo.name = res.position.city + res.position.area;
+        this.resInfo.description = res.position.city + res.position.area + '的设备';
+        this.resInfo.assetName = '王馨';
+        this.resInfo.assetId = '13222331177';
+        this.resInfo.title = "设备基本信息";
+        this.specResInfo = {};
+        this.specResInfo.title = "设备类别基本信息";
+        this.state = res.devStatus === 'A002' ? '已停用' : '运行中';
       },
       async startDev(){
+        /*
         let params0 = {
           "hardwareId":this.$route.query.hardwareId,
           "sitewhereToken":localStorage.getItem("sitewhereToken")
@@ -190,9 +217,11 @@
         if(res){
           this.getData();
         }
-
+        */
+        console.log(1111);
       },
       async stopDev(){
+        /*
         let params0 = {
           "hardwareId":this.$route.query.hardwareId,
           "sitewhereToken":localStorage.getItem("sitewhereToken")
@@ -241,6 +270,8 @@
         if(res){
           this.getData();
         }
+        */
+        console.log(22222);
 
       },
 
@@ -249,9 +280,8 @@
 
       this.data.push(deviceInfo);
       this.data.push(safemanInfo);
-      this.getData();
       this.specData.push(specificationInfo);
-//      this.watchResInfo.outTemp =
+      this.getData();
       this.tag = true;
     }
   }

@@ -51,7 +51,7 @@
         let res = await utils.getData(data);
         this.data.lat = this.$route.query.lat;
         this.data.lng = this.$route.query.lng;
-        this.data.zoom = 15;
+        this.data.zoom = 13;
         this.data.list = [];
         res.device.forEach((item) => {
           let loc1 = {

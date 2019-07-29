@@ -10,6 +10,9 @@ export const deviceInfo = {
       name: "hardwareId",
       label: "设备id号"
     }, {
+      name: "devName",
+      label: "设备名称",
+    }, {
       name: "comments",
       label: "设备详情",
     },

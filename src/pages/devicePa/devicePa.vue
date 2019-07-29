@@ -21,8 +21,9 @@
       <p>设备档位：{{dataList.workMode}}</p>
       <p>设定温度：{{dataList.tempSet}}</p>
       <p>空气温度：{{dataList.airTemp}}</p>
-      <p>汽化温度：{{dataList.waterBack}}</p>
+      <p>回水温度：{{dataList.waterBack}}</p>
       <p>出水温度：{{dataList.waterOut}}</p>
+      <p>汽化温度：{{dataList.steamTemp}}</p>
       <p>温度：{{dataList.temp}}</p>
       <p>湿度：{{dataList.shi}}</p>
     </Modal>
@@ -77,7 +78,6 @@
           isNeedSession: true,
         };
         let res = await utils.getData(data);
-        console.log(res);
         res = res.CDATA;
         this.dataList.airTemp = res.AIRTEMP + '度';
         this.dataList.steamTemp = res.STEAMTEMP + '度';
@@ -88,13 +88,15 @@
         this.dataList.shi = res.shidu + '%';
         this.dataList.devReady = res.devReady === '1' ? '设备工作正常' : '设备工作不正常';
         this.dataList.switch = res.switch === '1' ? '开' : '关';
-        this.dataList.workMode = res.workMode >= 20 ? '强档' : '中档';
+        this.dataList.workMode = res.workMode > 20 ? '强档' : (res.workMode <= 10 ? '低档' : '中档');
         /*
         let res = await utils.getData(data);
         let result = this.changeData(res);
         waterPaChart.option.series[0].data = result.resultWater;
         gasPaChart.option.series[0].data = result.resultGas;
         */
+        waterPaChart.option.series[0].data = [['2019-07-12 11:00:00', 10], ['2019-07-12 11:15:00', 20], ['2019-07-12 11:30:00', 22], ['2019-07-12 11:40:00', 30], ['2019-07-12 11:50:00', 19], ['2019-07-12 12:00:00', 23]];
+        gasPaChart.option.series[0].data = [['2019-07-12 11:00:00', 50], ['2019-07-12 11:15:00', 60], ['2019-07-12 11:30:00', 52], ['2019-07-12 11:40:00', 40], ['2019-07-12 11:50:00', 33], ['2019-07-12 12:00:00', 45]];
         this.flag = true;
 
       },
